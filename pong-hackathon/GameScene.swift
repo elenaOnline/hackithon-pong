@@ -13,15 +13,24 @@ class GameScene: SKScene {
     private var paddleLeft : SKSpriteNode?
     private var paddleRight : SKSpriteNode?
     private var ball : SKSpriteNode?
-    public var lastBallPos : Int?
-    var shouldUpdate = true
+    private var scoreBlock1 : SKSpriteNode?
+    private var scoreBlock2 : SKSpriteNode?
+    private var score1 : SKLabelNode?
+    private var score2 : SKLabelNode?
+    
+    var scoreLeft = 0
+    var scoreRight = 0
+//    var shouldUpdate = true
     
     override func didMove(to view: SKView) {
         
         self.paddleLeft = self.childNode(withName: "paddle1") as? SKSpriteNode
         self.paddleRight = self.childNode(withName: "paddle2") as? SKSpriteNode
+        self.scoreBlock1 = self.childNode(withName: "scoreblock1") as? SKSpriteNode
+        self.scoreBlock2 = self.childNode(withName: "scoreblock2") as? SKSpriteNode
+        self.score1 = self.scoreBlock1?.childNode(withName: "score1") as? SKLabelNode
+        self.score2 = self.scoreBlock2?.childNode(withName: "score2") as? SKLabelNode
         self.ball = self.childNode(withName: "ball") as? SKSpriteNode
-        self.lastBallPos = 0
         
         if let ball = self.ball {
             ball.physicsBody?.velocity = CGVector(dx: 800, dy: 500)
@@ -81,6 +90,9 @@ class GameScene: SKScene {
         let movementSpeed = 22
         let updateSpeed = currentTime
         let updateValue = Int(updateSpeed / 1000) / movementSpeed
+        
+        
+        
         if let ball = self.ball {
             if let paddleRight = self.paddleRight {
                 let isAbove = ball.position.y > paddleRight.position.y
@@ -88,6 +100,21 @@ class GameScene: SKScene {
                 let yPos = isAbove ? paddleRight.position.y + CGFloat(updateValue) : paddleRight.position.y - CGFloat(updateValue)
                 let newPoint = CGPoint(x: xPos, y: yPos)
                     paddleRight.position = newPoint
+                
+                if ball.position.x < frame.minX {
+                    scoreRight += 1
+                    self.score2?.text = String(scoreRight)
+                    print(scoreRight)
+                    ball.position = CGPoint(x: 0, y: 0)
+                    sleep(2)
+                } else if ball.position.x > frame.maxX {
+                    scoreLeft += 1
+                    self.score1?.text = String(scoreLeft)
+                    print(scoreLeft)
+                    ball.position = CGPoint(x: 0, y: 0)
+                    sleep(2)
+
+                }
             }
             
         }
