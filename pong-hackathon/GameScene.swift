@@ -24,7 +24,7 @@ class GameScene: SKScene {
         self.lastBallPos = 0
         
         if let ball = self.ball {
-            ball.physicsBody?.velocity = CGVector(dx: 800, dy: 50)
+            ball.physicsBody?.velocity = CGVector(dx: 800, dy: 500)
         }
     }
     
@@ -63,17 +63,36 @@ class GameScene: SKScene {
     }
     
     
+//    override func update(_ currentTime: TimeInterval) {
+//        // Called before each frame is rendered
+//        let number = Int.random(in: 0..<100)
+//
+//        let xPos = paddleRight?.position.x
+//        let newPoint = CGPoint(x: xPos ?? 0, y: ball?.position.y ?? 0)
+//
+//
+//        if ((number % 9) != 0) {
+//            self.paddleRight?.position = newPoint
+//        }
+//
+//    }
+    
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-        let number = Int.random(in: 0..<100)
-
-        let xPos = paddleRight?.position.x
-        let newPoint = CGPoint(x: xPos ?? 0, y: ball?.position.y ?? 0)
-        
-
-        if ((number % 9) != 0) {
-            self.paddleRight?.position = newPoint
+        let movementSpeed = 22
+        let updateSpeed = currentTime
+        let updateValue = Int(updateSpeed / 1000) / movementSpeed
+        if let ball = self.ball {
+            if let paddleRight = self.paddleRight {
+                let isAbove = ball.position.y > paddleRight.position.y
+                let xPos = paddleRight.position.x
+                let yPos = isAbove ? paddleRight.position.y + CGFloat(updateValue) : paddleRight.position.y - CGFloat(updateValue)
+                let newPoint = CGPoint(x: xPos, y: yPos)
+                    paddleRight.position = newPoint
+            }
+            
         }
+        
+        
         
     }
 }
