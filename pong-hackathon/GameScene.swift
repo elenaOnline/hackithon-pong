@@ -87,11 +87,10 @@ class GameScene: SKScene {
 //    }
     
     override func update(_ currentTime: TimeInterval) {
-        let movementSpeed = 22
+        let movementSpeed = 10
         let updateSpeed = currentTime
         let updateValue = Int(updateSpeed / 1000) / movementSpeed
-        
-        
+        print(currentTime)
         
         if let ball = self.ball {
             if let paddleRight = self.paddleRight {
@@ -106,15 +105,33 @@ class GameScene: SKScene {
                     self.score2?.text = String(scoreRight)
                     print(scoreRight)
                     ball.position = CGPoint(x: 0, y: 0)
-                    sleep(2)
+                    ball.physicsBody?.velocity = CGVector(dx: 800, dy: 500)
+                    scoreBlock1?.position = CGPoint(x: -319.47, y: 179.445)
+                    scoreBlock2?.position = CGPoint(x: 320, y: 179.445)
+                    let soundAction = SKAction.playSoundFileNamed("95error", waitForCompletion: true)
+                    self.run(soundAction)
+                    sleep(1)
+                    
                 } else if ball.position.x > frame.maxX {
                     scoreLeft += 1
                     self.score1?.text = String(scoreLeft)
                     print(scoreLeft)
                     ball.position = CGPoint(x: 0, y: 0)
-                    sleep(2)
-
+                    ball.physicsBody?.velocity = CGVector(dx: 800, dy: 500)
+                    scoreBlock1?.position = CGPoint(x: -319.47, y: 179.445)
+                    scoreBlock2?.position = CGPoint(x: 320, y: 179.445)
+                    let soundAction = SKAction.playSoundFileNamed("chimes", waitForCompletion: true)
+                    self.run(soundAction)
+                    sleep(1)
                 }
+                
+                if scoreBlock1?.position.x ?? 0 < frame.minX || scoreBlock1?.position.x ?? 0 > frame.maxX{
+                    scoreBlock1?.position = CGPoint(x: -319.47, y: 179.445)
+                }
+                if scoreBlock2?.position.x ?? 0 < frame.minX || scoreBlock2?.position.x ?? 0 > frame.maxX{
+                    scoreBlock2?.position = CGPoint(x: 320, y: 179.445)
+                }
+                
             }
             
         }
